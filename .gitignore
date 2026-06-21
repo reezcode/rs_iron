@@ -5,3 +5,7 @@
 build/
 .agents/
 skills-lock.json
+
+# Ignore all hidden files and directories
+.*
+!.gitignore

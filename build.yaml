@@ -1,0 +1,46 @@
+targets:
+  $default:
+    builders:
+      rs_iron|rs_iron_generator:
+        enabled: true
+        generate_for:
+          include:
+            - lib/**.dart
+            - example/**.dart
+          exclude:
+            - "**/*.g.dart"
+            - "**/*.freezed.dart"
+            - "**/*.rs_iron.dart"
+            - "**/*.config.dart"
+            - "**/*.chopper.dart"
+            - "**/*.gr.dart"
+            - "**/*.mocks.dart"
+            - "**/*.part.dart"
+            - "**/build/**"
+            - "**/*_state.dart"
+            - "**/*_event.dart"
+            - "**/bloc/**_state.dart"
+            - "**/bloc/**_event.dart"
+            - "**/models/*.g.dart"
+            - "**/models/*.freezed.dart"
+            - "**/config/*.g.dart"
+
+builders:
+  # Main builder (mirrors-free, recommended)
+  rs_iron_generator:
+    target: ":rs_iron_generator"
+    import: "package:rs_iron/builder.dart"
+    builder_factories: ["diMirrorsFreeBuilder"]
+    build_extensions: { ".dart": [".rs_iron.dart"] }
+    auto_apply: dependents
+    build_to: source
+
+  # Legacy builder (opt-in only, uses source_gen with dart:mirrors)
+  di_legacy_generator:
+    target: ":di_legacy_generator"
+    import: "package:rs_iron/builder.dart"
+    builder_factories: ["diLegacyBuilder"]
+    build_extensions: { ".dart": [".rs_iron.dart"] }
+    auto_apply: none
+    build_to: source
+    applies_builders: ["source_gen|combining_builder"]
